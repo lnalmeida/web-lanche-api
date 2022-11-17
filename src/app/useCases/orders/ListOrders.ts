@@ -1,0 +1,15 @@
+import { Request, Response } from 'express';
+import {Order} from '../../models/Order';
+import { IOrder } from './IOrder';
+
+export const ListOrders  =  async (req: Request, res: Response) => {
+    try {
+        const orders: IOrder[] = await Order.find()
+            .sort({createdAt: 1})
+            .populate('products.product');
+
+        return res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).send(`Error listing Orders: ${error}`);
+    }
+};
